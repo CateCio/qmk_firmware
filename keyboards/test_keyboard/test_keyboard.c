@@ -179,7 +179,23 @@ bool oled_task_kb(void) {
     return false;
 }
 
+bool encoder_update_user(uint8_t index, bool clockwise);
 
+bool encoder_update_kb(uint8_t index, bool clockwise) {
+    return encoder_update_user(index, clockwise);
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            tap_code(KC_VOLU);
+        } else {
+            tap_code(KC_VOLD);
+        }
+    }
+    log_print("Ecoder %d, Clockwise %d\n", index, clockwise);
+    return true;
+}
 
 void raw_hid_receive(uint8_t *data, uint8_t length) {
     log_print("Recv %d\n", length);
